@@ -1,0 +1,165 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "MIDI Maestro",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "schemes": ["http"],
+  "paths": {
+    "/": {
+      "post": {
+        "tags": ["Generate a MIDI Data URI"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "The MIDI information to pass to midi-writer-js.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "events": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "pitch": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[A-G](-)?\\d+$"
+                        }
+                      },
+                      "duration": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(1|2|d2|dd2|4|4t|d4|dd4|8|8t|d8|dd8|16|16t|32|64|t\\d+)$"
+                        }
+                      },
+                      "wait": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^(1|2|d2|dd2|4|4t|d4|dd4|8|8t|d8|dd8|16|16t|32|64|t\\d+)$"
+                        }
+                      },
+                      "sequential": {
+                        "type": "boolean"
+                      },
+                      "velocity": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 100
+                      },
+                      "repeat": {
+                        "type": "number",
+                        "minimum": 1
+                      },
+                      "channel": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 16
+                      },
+                      "grace": {
+                        "type": "string",
+                        "pattern": "^[A-G](-)?\\d+$"
+                      },
+                      "tick": {
+                        "type": "number",
+                        "minimum": 1
+                      }
+                    },
+                    "required": ["pitch", "duration"]
+                  }
+                },
+                "tempo": {
+                  "type": "number",
+                  "minimum": 1
+                },
+                "text": {
+                  "type": "string"
+                },
+                "copyright": {
+                  "type": "string"
+                },
+                "track_name": {
+                  "type": "string"
+                },
+                "instrument_name": {
+                  "type": "string"
+                },
+                "time_signature": {
+                  "type": "object",
+                  "properties": {
+                    "numerator": {
+                      "type": "number",
+                      "minimum": 1
+                    },
+                    "denominator": {
+                      "type": "number",
+                      "minimum": 1
+                    },
+                    "midi_clocks_per_tick": {
+                      "type": "number",
+                      "minimum": 1
+                    },
+                    "notes_per_midi_clock": {
+                      "type": "number",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "numerator",
+                    "denominator",
+                    "midi_clocks_per_tick",
+                    "notes_per_midi_clock"
+                  ]
+                }
+              },
+              "required": ["events"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "pattern": "Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
