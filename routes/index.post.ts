@@ -8,6 +8,7 @@ export default eventHandler(async (event) => {
     const track = new MidiWriter.Track();
 
     console.log(body)
+    console.log(body.events)
 
     for (const e of body.events ?? []) {
       track.addEvent(new MidiWriter.NoteEvent(e));
