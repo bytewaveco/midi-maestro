@@ -61,6 +61,11 @@
                         "type": "number",
                         "minimum": 1
                       },
+                      "channel": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 16
+                      },
                       "grace": {
                         "type": "string",
                         "pattern": "^[A-G](-)?\\d+$"
@@ -77,7 +82,16 @@
                   "type": "number",
                   "minimum": 1
                 },
+                "text": {
+                  "type": "string"
+                },
+                "copyright": {
+                  "type": "string"
+                },
                 "track_name": {
+                  "type": "string"
+                },
+                "instrument_name": {
                   "type": "string"
                 },
                 "time_signature": {

@@ -4,23 +4,33 @@ import { storage } from "../utils/firebase";
 
 export default eventHandler(async (event) => {
   try {
-    let body = await readRawBody(event);
+    const body = await readBody(event);
     const track = new MidiWriter.Track();
 
-    if (typeof body === "string") {
-      body = JSON.parse(body);
+    console.log(body)
+
+    for (const e of body.events ?? []) {
+      track.addEvent(new MidiWriter.NoteEvent(e));
     }
 
     if (body.tempo) {
       track.setTempo(body.tempo);
     }
 
+    if (body.text) {
+      track.addText(body.text);
+    }
+
+    if (body.copyright) {
+      track.addCopyright(body.copyright);
+    }
+
     if (body.track_name) {
       track.addTrackName(body.track_name);
     }
 
-    for (const e of body.events ?? []) {
-      track.addEvent(new MidiWriter.NoteEvent(e));
+    if (body.instrument_name) {
+      track.addInstrumentName(body.instrument_name);
     }
 
     if (
@@ -38,15 +48,14 @@ export default eventHandler(async (event) => {
       );
     }
 
-    const write = new MidiWriter.Writer(track);
+    const write = new MidiWriter.Writer(track, {
+      division: body.division ?? 128,
+      tempo: body.tempo ?? 120,
+    });
 
     const storageRef = ref(
       storage,
-      `midi/${
-        typeof body.track_name === "string"
-          ? body.track_name.replace(/\s+/g, "-")
-          : "Untitled"
-      }-${Date.now()}.mid`
+      `midi/${typeof body.track_name === 'string' ? body.track_name.replace(/\s+/, '-') : 'Untitled'}-${Date.now()}.mid`
     );
 
     await uploadBytes(storageRef, write.buildFile(), {
