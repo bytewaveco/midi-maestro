@@ -1,0 +1,17 @@
+{
+  "events": [
+    { "pitch": ["E4", "D4"], "duration": "4", "sequential": true },
+    { "pitch": ["C4"], "duration": "2", "sequential": true },
+    { "pitch": ["E4", "D4"], "duration": "4", "sequential": true },
+    { "pitch": ["C4"], "duration": "2", "sequential": true },
+    {
+      "pitch": ["C4", "C4", "C4", "C4", "D4", "D4", "D4", "D4"],
+      "duration": "8",
+      "sequential": true
+    },
+    { "pitch": ["E4", "D4"], "duration": "4", "sequential": true },
+    { "pitch": ["C4"], "duration": "2", "sequential": true }
+  ],
+  "track_name": "Track 1",
+  "tempo": 120
+}

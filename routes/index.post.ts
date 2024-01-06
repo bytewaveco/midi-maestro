@@ -1,33 +1,22 @@
 import MidiWriter from "midi-writer-js";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../utils/firebase";
 
 export default eventHandler(async (event) => {
   try {
     const body = await readBody(event);
     const track = new MidiWriter.Track();
 
-    for (const e of body.events ?? []) {
-      track.addEvent(new MidiWriter.NoteEvent(e));
-    }
-
     if (body.tempo) {
       track.setTempo(body.tempo);
-    }
-
-    if (body.text) {
-      track.addText(body.text);
-    }
-
-    if (body.copyright) {
-      track.addCopyright(body.copyright);
     }
 
     if (body.track_name) {
       track.addTrackName(body.track_name);
     }
 
-    if (body.instrument_name) {
-      track.addInstrumentName(body.instrument_name);
+    for (const e of body.events ?? []) {
+      track.addEvent(new MidiWriter.NoteEvent(e));
     }
 
     if (
@@ -45,14 +34,11 @@ export default eventHandler(async (event) => {
       );
     }
 
-    const write = new MidiWriter.Writer(track, {
-      division: body.division ?? 128,
-      tempo: body.tempo ?? 120,
-    });
+    const write = new MidiWriter.Writer(track);
 
     const storageRef = ref(
       storage,
-      `midi/${body.track_name ?? "untitled"}-${Date.now()}.mid`
+      `midi/${body.track_name.replace(/\s+/, '-')}-${Date.now()}.mid`
     );
 
     await uploadBytes(storageRef, write.buildFile(), {
