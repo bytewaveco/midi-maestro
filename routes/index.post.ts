@@ -7,6 +7,8 @@ export default eventHandler(async (event) => {
     const body = await readBody(event);
     const track = new MidiWriter.Track();
 
+    console.log(body)
+
     if (body.tempo) {
       track.setTempo(body.tempo);
     }
@@ -40,7 +42,7 @@ export default eventHandler(async (event) => {
       storage,
       `midi/${
         typeof body.track_name === "string"
-          ? body.track_name.replace(/\s+/, "-")
+          ? body.track_name.replace(/\s+/g, "-")
           : "Untitled"
       }-${Date.now()}.mid`
     );
