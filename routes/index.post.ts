@@ -55,7 +55,7 @@ export default eventHandler(async (event) => {
 
     const storageRef = ref(
       storage,
-      `midi/${typeof body.track_name === 'string' ? body.track_name.replace(/\s+/, '-') : 'Untitled'}-${Date.now()}.mid`
+      `midi/${typeof body.track_name === 'string' ? body.track_name.replace(/\s+/g, '-') : 'Untitled'}-${Date.now()}.mid`
     );
 
     await uploadBytes(storageRef, write.buildFile(), {
