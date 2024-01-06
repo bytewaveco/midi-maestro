@@ -1,4 +1,5 @@
 import MidiWriter from "midi-writer-js";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export default eventHandler(async (event) => {
   try {
@@ -49,7 +50,18 @@ export default eventHandler(async (event) => {
       tempo: body.tempo ?? 120,
     });
 
-    return { data: write.dataUri() };
+    const storageRef = ref(
+      storage,
+      `midi/${body.track_name ?? "untitled"}-${Date.now()}.mid`
+    );
+
+    await uploadBytes(storageRef, write.buildFile(), {
+      contentType: "audio/midi",
+    });
+
+    const url = await getDownloadURL(storageRef);
+
+    return { data: url };
   } catch (error) {
     console.error(error);
 

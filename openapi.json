@@ -6,14 +6,14 @@
   },
   "servers": [
     {
-      "url": "https://localhost:3000"
+      "url": "https://midi-maestro.vercel.app"
     }
   ],
-  "schemes": ["http"],
+  "schemes": ["https"],
   "paths": {
     "/": {
       "post": {
-        "tags": ["Generate a MIDI Data URI"],
+        "operationId": "Generate MIDI Data URL",
         "parameters": [
           {
             "name": "body",
