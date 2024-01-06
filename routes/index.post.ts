@@ -4,10 +4,12 @@ import { storage } from "../utils/firebase";
 
 export default eventHandler(async (event) => {
   try {
-    const body = await readBody(event);
+    let body = await readRawBody(event);
     const track = new MidiWriter.Track();
 
-    console.log(body)
+    if (typeof body === "string") {
+      body = JSON.parse(body);
+    }
 
     if (body.tempo) {
       track.setTempo(body.tempo);
