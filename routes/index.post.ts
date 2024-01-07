@@ -1,5 +1,5 @@
 import MidiWriter from "midi-writer-js";
-import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../utils/firebase";
 
 export default eventHandler(async (event) => {
@@ -53,18 +53,23 @@ export default eventHandler(async (event) => {
 
     const storageRef = ref(
       storage,
-      `midi/${typeof body.track_name === 'string' ? body.track_name.replace(/\s+/g, '-') : 'Untitled'}-${Date.now()}.mid`
+      `midi/${
+        typeof body.track_name === "string"
+          ? body.track_name.replace(/\s+/g, "-")
+          : "Untitled"
+      }-${Date.now()}.mid`
     );
 
     await uploadBytes(storageRef, write.buildFile(), {
       contentType: "audio/midi",
     });
 
-    const url = await getDownloadURL(storageRef);
+    let url = await getDownloadURL(storageRef);
 
-    setTimeout(async () => {
-      await deleteObject(storageRef);
-    }, 60 * 1000 * 2)
+    url = url.replace(
+      "https://firebasestorage.googleapis.com/v0/b/bytewave-midi-maestro.appspot.com/o",
+      "https://bytewave-midi-maestro.appspot.com"
+    );
 
     return { data: url };
   } catch (error) {
