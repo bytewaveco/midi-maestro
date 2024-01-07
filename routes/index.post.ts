@@ -1,14 +1,11 @@
 import MidiWriter from "midi-writer-js";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../utils/firebase";
 
 export default eventHandler(async (event) => {
   try {
     const body = await readBody(event);
     const track = new MidiWriter.Track();
-
-    console.log(body)
-    console.log(body.events)
 
     for (const e of body.events ?? []) {
       track.addEvent(new MidiWriter.NoteEvent(e));
@@ -64,6 +61,10 @@ export default eventHandler(async (event) => {
     });
 
     const url = await getDownloadURL(storageRef);
+
+    setTimeout(async () => {
+      await deleteObject(storageRef);
+    }, 60 * 1000 * 2)
 
     return { data: url };
   } catch (error) {
