@@ -64,12 +64,7 @@ export default eventHandler(async (event) => {
       contentType: "audio/midi",
     });
 
-    let url = await getDownloadURL(storageRef);
-
-    url = url.replace(
-      "https://firebasestorage.googleapis.com/v0/b/bytewave-midi-maestro.appspot.com/o",
-      "https://bytewave-midi-maestro.appspot.com"
-    );
+    const url = await getDownloadURL(storageRef);
 
     return { data: url };
   } catch (error) {
@@ -78,7 +73,7 @@ export default eventHandler(async (event) => {
     setResponseStatus(event, 400, "Bad Request");
 
     return {
-      error: "Bad Request",
+      error: error.message,
     };
   }
 });

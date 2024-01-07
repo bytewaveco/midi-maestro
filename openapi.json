@@ -31,21 +31,21 @@
                           "type": "array",
                           "items": {
                             "type": "string",
-                            "pattern": "^[A-G](-)?\\d+$"
+                            "pattern": "^[A-G](-)?[0-9]+$"
                           }
                         },
                         "duration": {
                           "type": "array",
                           "items": {
                             "type": "string",
-                            "pattern": "^(1|2|d2|dd2|4|4t|d4|dd4|8|8t|d8|dd8|16|16t|32|64|t\\d+)$"
+                            "pattern": "^(1|2|d2|dd2|4|4t|d4|dd4|8|8t|d8|dd8|16|16t|32|64|t[0-9]+)$"
                           }
                         },
                         "wait": {
                           "type": "array",
                           "items": {
                             "type": "string",
-                            "pattern": "^(1|2|d2|dd2|4|4t|d4|dd4|8|8t|d8|dd8|16|16t|32|64|t\\d+)$"
+                            "pattern": "^(1|2|d2|dd2|4|4t|d4|dd4|8|8t|d8|dd8|16|16t|32|64|t[0-9]+)$"
                           }
                         },
                         "sequential": {
@@ -67,7 +67,7 @@
                         },
                         "grace": {
                           "type": "string",
-                          "pattern": "^[A-G](-)?\\d+$"
+                          "pattern": "^[A-G](-)?[0-9]+$"
                         },
                         "tick": {
                           "type": "number",
@@ -150,8 +150,7 @@
                   "type": "object",
                   "properties": {
                     "error": {
-                      "type": "string",
-                      "pattern": "Bad Request"
+                      "type": "string"
                     }
                   }
                 }
